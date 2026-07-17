@@ -15,5 +15,5 @@ is the single source of truth for the seven-step protocol
 Integrate & Review → Close), including the required North Star content and the
 completion conditions for each step.
 
-Where the protocol references the Architecture Manifest, use
+Where the protocol references the Architecture Canon, use
 [docs/architecture.md](../../../docs/architecture.md).

@@ -1,5 +1,9 @@
 # Agent Verification Contract
 
+This contract governs **feature and epic verification** — the final validation that an
+integrated system satisfies the North Star. For step-level validation, use code review
+and unit tests (see `reviewing-code` skill).
+
 ## Objective
 
 Verify completed end-to-end features against the North Star through executable system behavior.
@@ -26,7 +30,7 @@ Before verification begins, review:
 - Epic context
 - Step requirements
 - Acceptance criteria
-- Architecture Manifest
+- Architecture Canon
 - Existing tests and system interfaces
 
 Extract the behavior that must be demonstrated.
