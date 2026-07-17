@@ -83,6 +83,8 @@ eliminate necessary complexity. Contain it.
   decomposition, and dependency graph; use before starting a feature or epic.
 - [building-features](.agents/skills/building-features/SKILL.md) — inside-out feature
   construction, required plan, and completion audit; use when implementing.
+- [reviewing-code](.agents/skills/reviewing-code/SKILL.md) — code review against intent,
+  correctness, architecture, and security; use after completing a step or feature.
 - [verifying-features](.agents/skills/verifying-features/SKILL.md) — end-to-end North
   Star verification with an executable driver; use when a feature is code-complete.
 
