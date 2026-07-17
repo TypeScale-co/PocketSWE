@@ -9,8 +9,8 @@ PocketSWE tells AI agents _how_ to build software. Drop it into a greenfield pro
 It is packaged the way coding agents load context:
 
 -   **`AGENTS.md`** — a lean, always-on contract holding the non-negotiable architectural invariants: the spine, the dependency direction, and the prohibited-complexity list. Auto-discovered by the many tools that support the [AGENTS.md standard](https://agents.md) (Codex, Cursor, Copilot CLI, Gemini CLI, Claude Code, and more).
--   **Skills** (`.agents/skills/`) — phase-specific procedures loaded on demand via progressive disclosure: only each skill's name and description sit in context until a matching task loads the body.
--   **`docs/`** — the full-text sources, linked from `AGENTS.md`, as the portable fallback for tools without skill support.
+-   **Skills** (`.agents/skills/`) — phase-specific entry points loaded on demand via progressive disclosure: only each skill's name and description sit in context until a matching task loads the body, which directs the agent to the full source document in `docs/`.
+-   **`docs/`** — the full-text sources and single source of truth: each skill references them directly, and `AGENTS.md` links them as the portable fallback for tools without skill support.
 
 These documents encode hard-won opinions about:
 
@@ -29,9 +29,9 @@ PocketSWE locks in the boring decisions upfront so agents can focus on solving y
 | Path                                        | Loaded             | Purpose                                                                             |
 | ------------------------------------------- | ------------------ | ----------------------------------------------------------------------------------- |
 | `AGENTS.md`                                 | Always             | Spine, dependency direction, prohibited complexity, pointers to skills and docs     |
-| `.agents/skills/planning-work/`             | When planning      | The Discover → Architect → Decompose → Graph → Execute → Integrate → Close protocol |
-| `.agents/skills/building-features/`         | When implementing  | Inside-out construction procedure, required plan, completion audit                  |
-| `.agents/skills/verifying-features/`        | When verifying     | North Star verification procedure + bundled executable driver script                |
+| `.agents/skills/planning-work/`             | When planning      | Entry point for the work protocol — references `docs/work-protocol.md`              |
+| `.agents/skills/building-features/`         | When implementing  | Entry point for feature construction — references `docs/architecture.md`            |
+| `.agents/skills/verifying-features/`        | When verifying     | Entry point for North Star verification — references `docs/verification.md`         |
 | `docs/architecture.md`                      | On demand          | Full architecture contract (layer rules in detail)                                  |
 | `docs/work-protocol.md`                     | On demand          | Full work protocol                                                                  |
 | `docs/verification.md`                      | On demand          | Full verification contract                                                          |
