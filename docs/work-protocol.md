@@ -1,5 +1,39 @@
 # Agent Work Protocol
 
+## Agent Hierarchy
+
+```text
+Epic Orchestrator
+    │
+    ├── Step Agent (sub-agent)
+    │       │
+    │       └── Reviewer Sub-agents
+    │               Correctness
+    │               Architecture
+    │               Test
+    │               Security
+    │
+    ├── Step Agent (sub-agent)
+    │       │
+    │       └── Reviewer Sub-agents
+    │
+    └── ... (one Step Agent per implementation step)
+
+    After all steps submit:
+    │
+    ├── Reviewer Sub-agents (integrated feature)
+    │
+    └── Feature Verification
+```
+
+The **Epic Orchestrator** owns the epic from discovery through close. It spawns Step Agents, receives their completed work, integrates, reviews the integrated result, verifies, and closes.
+
+Each **Step Agent** is a fresh-context sub-agent responsible for one implementation step. It implements, orchestrates its own code review (spawning Reviewer sub-agents), resolves findings, and submits the completed step back to the Epic Orchestrator.
+
+**Reviewer Sub-agents** are fresh-context sub-agents spawned by either a Step Agent or the Epic Orchestrator to perform independent code review investigations.
+
+---
+
 ## 1. Discover
 
 Gather information until the feature intent is unambiguous.
@@ -66,72 +100,60 @@ Maximize parallelism while preserving correctness.
 
 ## 5. Execute
 
-Assign one agent per implementation step.
+The Epic Orchestrator spawns one Step Agent (sub-agent) per implementation step.
 
-Each agent:
+### Step Agent Responsibilities
 
-- Reviews the North Star
-- Reviews the Architecture Canon
-- Reviews the Epic context
-- Reviews the Step context
-- Plans against the current codebase
-- Implements only its assigned step
-- Adds appropriate tests
-- Submits the step for code review
-- Verifies completion
+Each Step Agent:
 
-Agents should not modify unrelated steps.
+1. Reviews the North Star
+2. Reviews the Architecture Canon
+3. Reviews the Epic context
+4. Reviews the Step requirements
+5. Plans against the current codebase
+6. Implements only its assigned step
+7. Adds appropriate tests
+8. Orchestrates code review (via `reviewing-code` skill)
+9. Resolves all blocking findings
+10. Submits completed step to the Epic Orchestrator
+
+Step Agents MUST NOT submit steps with unresolved blocking findings.
+
+Step Agents MUST NOT modify code outside their assigned step.
 
 ### Parallel Execution
 
-When steps execute in parallel, each agent works in a separate worktree and branch.
+When steps execute in parallel, each Step Agent works in a separate worktree and branch.
 
-After a step's changes are accepted and integrated, the agent removes its worktree
-and branch. Do not leave orphaned branches or worktrees.
-
-### Step Verification
-
-Before integration, each step requires:
-
-- Unit tests covering the step's scope
-- Code review via the `reviewing-code` skill
-
-Step verification validates the implementation. Feature verification validates the
-integrated system.
+After a step's changes are accepted and integrated, the Step Agent removes its worktree and branch. Do not leave orphaned branches or worktrees.
 
 ---
 
 ## 6. Integrate & Review
 
-Integrate completed steps and review the combined result.
+The Epic Orchestrator receives completed steps from Step Agents and integrates them.
 
-**Integration review** verifies:
+After integration, the Epic Orchestrator:
 
-- No conflicts between neighboring steps
-- No duplicated work
-- No architectural violations introduced by integration
-- Combined behavior matches the North Star
+1. Orchestrates code review of the integrated feature (via `reviewing-code` skill)
+2. Resolves all blocking findings
+3. Verifies no conflicts between steps
+4. Verifies no architectural violations introduced by integration
+5. Verifies combined behavior matches the North Star
 
-**Code review** (via `reviewing-code` skill) validates the integrated feature before verification.
-
-Resolve integration issues before closing the Epic.
+Do not proceed to Close with unresolved blocking findings.
 
 ---
 
 ## 7. Close
 
-Before closing, complete:
+The Epic Orchestrator completes verification and closes the epic.
 
-- **Code review** of the integrated feature
-- **Feature verification** (via `verifying-features` skill) proving the integrated
-  system satisfies the North Star through executable end-to-end behavior
-
-Verify that:
-
-- Every acceptance criterion is satisfied.
-- All steps are complete.
-- Tests pass.
-- Architecture remains compliant.
-- Documentation is updated if required.
+1. Run feature verification (via `verifying-features` skill)
+2. Prove the integrated system satisfies the North Star through executable end-to-end behavior
+3. Verify all acceptance criteria are satisfied
+4. Verify all tests pass
+5. Verify architecture remains compliant
+6. Update documentation if required
 
 The Epic is complete only when the integrated system satisfies the original North Star.
