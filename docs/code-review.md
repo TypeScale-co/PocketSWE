@@ -124,6 +124,8 @@ Every finding MUST identify:
 
 Determine whether the implementation preserves the Architecture Canon.
 
+For browser client code, the Architecture Canon includes `ui-architecture.md`.
+
 Inspect for issues including, but not limited to:
 
 -   dependency violations

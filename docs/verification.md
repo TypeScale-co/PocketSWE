@@ -196,6 +196,11 @@ Do not bypass the Controller by invoking Services directly for end-to-end verifi
 
 Service-level tests support verification but do not replace it.
 
+When the entry point is a browser client, `ui-architecture.md` states the additional
+UI-specific requirements: internal client-to-backend dependencies are never mocked, the
+application must start from a single command, and Playwright must cover every North Star
+capability against the real backend.
+
 ---
 
 # 5. Build the Verification Driver

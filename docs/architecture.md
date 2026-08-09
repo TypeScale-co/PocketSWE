@@ -424,6 +424,13 @@ Client architecture is independent of the backend architecture.
 
 Clients MUST NOT depend directly on backend Domain, Services, Ports, Adapters, or Controller code.
 
+Browser clients are governed by `ui-architecture.md`, which defines their stack, structure,
+data access, accessibility, and verification requirements.
+
+```text
+Clients/web/
+```
+
 ---
 
 ## Docs

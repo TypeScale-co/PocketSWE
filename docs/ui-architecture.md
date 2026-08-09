@@ -1,20 +1,40 @@
 # Agent UI Architecture Contract
 
-This contract governs **browser-based user interface** construction. It defines the stack, patterns, and structure for building web clients that consume backend APIs.
+This contract governs **browser-based user interface** construction. It defines the stack,
+patterns, and structure for web clients that consume backend APIs.
 
-For verification requirements, see `verification.md`. The UI is part of the system—not a separate application.
+A web client is a `Clients` entry in the Architecture Canon. `architecture.md` governs the
+client's relationship to the backend; this contract governs the client's internals.
+
+For verification requirements, see `verification.md`. The UI is part of the system — not a
+separate application.
 
 ## Objective
 
 Build accessible, maintainable web interfaces using a constrained set of tools and patterns.
 
-UI clients must:
+UI clients:
 
--   Consume backend APIs as their only data source
--   Render correctly across modern browsers
--   Support light and dark themes
--   Remain understandable as they grow
--   Work out of the box when delivered
+- MUST consume backend APIs as their only data source.
+- MUST render correctly in current versions of Chrome, Firefox, Safari, and Edge.
+- MUST support light and dark themes.
+- MUST start and function from a single documented command.
+- SHOULD remain understandable as they grow.
+
+---
+
+# Placement
+
+A web client lives under `Clients`:
+
+```text
+Clients/web/
+```
+
+The client MUST NOT import backend Domain, Services, Ports, Adapters, or Controller code.
+It communicates with the system only through published transport endpoints.
+
+All paths in this contract are relative to the client root.
 
 ---
 
@@ -24,10 +44,10 @@ UI clients must:
 
 **Next.js** with App Router.
 
--   Server Components for initial page loads
--   Client Components for interactive elements
--   File-based routing
--   TypeScript strict mode
+- Server Components MUST own initial page data.
+- Client Components MUST be limited to interactive elements.
+- Routing MUST be file-based.
+- TypeScript MUST run in strict mode.
 
 Other frameworks introduce unnecessary divergence.
 
@@ -35,11 +55,9 @@ Other frameworks introduce unnecessary divergence.
 
 **Tailwind CSS** for all styling.
 
--   Utility-first classes only
--   No CSS modules
--   No CSS-in-JS
--   No inline style objects
--   Custom design tokens via configuration
+- Utility classes MUST be the only styling mechanism.
+- CSS modules, CSS-in-JS, and inline style objects MUST NOT be used.
+- Design tokens MUST be defined in Tailwind configuration rather than repeated as literals.
 
 Tailwind provides consistency without runtime overhead.
 
@@ -47,10 +65,9 @@ Tailwind provides consistency without runtime overhead.
 
 **shadcn/ui** for component primitives.
 
--   Copy components into the project
--   Built on Radix primitives (accessibility handled)
--   Full source control for customization
--   No runtime component library dependency
+- Primitives MUST be copied into the project, not consumed as a runtime dependency.
+- The accessibility behavior supplied by Radix MUST be preserved.
+- Customization happens in the copied source.
 
 Owning the component source prevents version lock-in and enables customization.
 
@@ -58,15 +75,51 @@ Owning the component source prevents version lock-in and enables customization.
 
 **Lucide React** for iconography.
 
-Consistent icon set with tree-shaking support.
+- Icons MUST be imported individually to preserve tree-shaking.
+- Decorative icons MUST be hidden from assistive technology.
+- Icon-only controls MUST carry an accessible name.
 
 ## Theming
 
 **next-themes** for dark mode.
 
--   System preference detection by default
--   Manual toggle available
--   CSS variables switch between palettes
+- System preference MUST be detected by default.
+- A manual toggle MUST be available.
+- Palettes MUST switch through CSS variables bound to semantic tokens.
+- Theme-specific colors MUST NOT be hardcoded at the component level.
+
+---
+
+# Data Access
+
+## Reads
+
+Server Components are the default owner of server data.
+
+- Initial page data MUST be fetched in a Server Component and passed down as props.
+- Server data MUST NOT be mirrored into `useState` as a cache.
+- `useEffect` MUST NOT fetch data that a Server Component can fetch.
+
+## Mutations
+
+- Mutations MUST call a typed function in `services/`.
+- After a successful mutation, affected data MUST be refreshed through `router.refresh()`.
+- Server Actions MUST NOT be used. Mutations go through the API.
+
+## Escalation
+
+A client-side server-state library (TanStack Query) MAY be introduced only when a screen
+requires behavior Server Components cannot express:
+
+- Polling or live-updating data
+- Pagination or infinite scroll retained across interaction
+- Optimistic updates
+- Cache invalidation shared across unrelated components
+
+When introduced, it MUST be scoped to the feature that requires it and MUST NOT become the
+default data path.
+
+Client state management frameworks for non-server state MUST NOT be used.
 
 ---
 
@@ -74,7 +127,7 @@ Consistent icon set with tree-shaking support.
 
 ## Semantic Colors
 
-Define colors by purpose, not by value:
+Colors MUST be defined by purpose, not by value:
 
 ```text
 background / foreground
@@ -99,34 +152,57 @@ Status colors follow a consistent pattern:
 
 ## Typography
 
-System font stack:
+Font stack:
 
 ```text
 Inter, system-ui, -apple-system, sans-serif
 ```
 
-Type scale (base 14-16px):
+Type scale:
 
-| Purpose         | Relative Size               |
-| --------------- | --------------------------- |
-| Page title      | Large, semibold             |
-| Section heading | Medium-large, medium weight |
-| Card/item title | Base, medium weight         |
-| Body text       | Base, normal weight         |
-| Caption/helper  | Small, muted                |
+| Purpose         | Class                           |
+| --------------- | ------------------------------- |
+| Page title      | `text-2xl font-semibold`        |
+| Section heading | `text-lg font-medium`           |
+| Card/item title | `text-base font-medium`         |
+| Body text       | `text-sm`                       |
+| Caption/helper  | `text-xs text-muted-foreground` |
+
+Sizes outside this scale MUST NOT be used without extending the table.
 
 ## Spacing
 
-4px base grid:
+4px base grid. Values off the grid MUST NOT be used.
 
-| Context      | Multiplier     |
-| ------------ | -------------- |
-| Inline/tight | 2x (8px)       |
-| Form fields  | 4x (16px)      |
-| Card padding | 6x (24px)      |
-| Sections     | 6-8x (24-32px) |
+| Context      | Multiplier     | Tailwind                  |
+| ------------ | -------------- | ------------------------- |
+| Inline/tight | 2x (8px)       | `gap-2`                   |
+| Form fields  | 4x (16px)      | `space-y-4`               |
+| Card padding | 6x (24px)      | `p-6`                     |
+| Sections     | 6-8x (24-32px) | `space-y-6` / `space-y-8` |
 
-Consistent spacing creates visual rhythm without effort.
+---
+
+# Accessibility
+
+Radix primitives supply baseline behavior. That baseline MUST NOT be defeated, and it does
+not by itself satisfy this contract.
+
+Every interface:
+
+- MUST be fully operable by keyboard, in a logical tab order, with no keyboard traps.
+- MUST show a visible focus indicator on every focusable element.
+- MUST give every control an accessible name.
+- MUST associate form inputs with their labels and their validation messages.
+- MUST meet WCAG AA contrast in both themes: 4.5:1 for body text, 3:1 for large text and
+  interactive boundaries.
+- MUST NOT convey state through color alone.
+- MUST announce asynchronous state changes and errors to assistive technology.
+- MUST use semantic elements. A `div` MUST NOT stand in for a button, link, or heading.
+
+The end-to-end suite MUST run an automated accessibility check against each verified screen.
+Automated checks are necessary but not sufficient — keyboard operation MUST be exercised
+explicitly.
 
 ---
 
@@ -135,42 +211,46 @@ Consistent spacing creates visual rhythm without effort.
 ## Directory Layout
 
 ```text
-app/                          # Routes and pages
-├── layout.tsx                # Root layout
-├── page.tsx                  # Entry point
-├── (public)/                 # Unauthenticated routes
-└── (authenticated)/          # Protected routes
-    └── layout.tsx            # Auth wrapper
-
-components/
-├── ui/                       # Primitives (button, input, card)
-├── layout/                   # Shell (header, nav, footer)
-└── [feature]/                # Feature-specific components
-
-services/                     # API client functions
-providers/                    # React context providers
-hooks/                        # Custom hooks
-types/                        # TypeScript definitions
-lib/                          # Utilities
+Clients/web/
+├── app/                      # Routes and pages
+│   ├── layout.tsx            # Root layout
+│   ├── page.tsx              # Entry point
+│   ├── (public)/             # Unauthenticated routes
+│   └── (authenticated)/      # Protected routes
+│       └── layout.tsx        # Auth wrapper
+│
+├── components/
+│   ├── ui/                   # Primitives (button, input, card)
+│   ├── layout/               # Shell (header, nav, footer)
+│   └── [feature]/            # Feature-specific components
+│
+├── services/                 # API client functions
+├── providers/                # React context providers
+├── hooks/                    # Custom hooks
+├── types/                    # TypeScript definitions
+└── lib/                      # Utilities
 ```
 
 ## Organization Principles
 
 **Group by feature, not by type.**
 
-A feature folder contains all components specific to that feature.
+A feature folder MUST contain the components specific to that feature.
 
 **Shared components bubble up.**
 
-When a component is used by multiple features, move it to `components/ui/` or `components/layout/`.
+When a component is used by more than one feature, it MUST move to `components/ui/` or
+`components/layout/`. It MUST NOT be duplicated per feature.
 
 **Services are thin.**
 
-API client functions handle fetch, auth headers, and error transformation. Business logic stays in the backend.
+Service functions own fetch, auth headers, and error transformation. Business logic MUST
+remain in the backend.
 
 **Providers are minimal.**
 
-Use React context for cross-cutting concerns: auth state, theme, toasts. Avoid prop drilling. Avoid overuse.
+React context is for cross-cutting concerns: auth state, theme, toasts. Use it to avoid
+prop drilling, not as a general state store.
 
 ---
 
@@ -190,11 +270,13 @@ export async function getItems(): Promise<Item[]> {
 }
 ```
 
-Each function handles one endpoint. Composition happens at the component level.
+- Each function MUST handle exactly one endpoint.
+- Each function MUST return an application-owned type, never a raw response.
+- Composition happens at the component level.
 
 ## Error Handling
 
-API errors must be caught and surfaced.
+API errors MUST be caught and surfaced:
 
 | Error            | User Sees                      |
 | ---------------- | ------------------------------ |
@@ -203,92 +285,161 @@ API errors must be caught and surfaced.
 | 4xx Client error | Actionable message             |
 | 5xx Server error | "Something went wrong" + retry |
 
-Never display raw errors, stack traces, or technical details.
+Raw errors, stack traces, and technical details MUST NOT be displayed.
 
 ## Loading States
 
-All async operations show feedback:
+Every async operation MUST show feedback:
 
--   Skeleton loaders for initial page data
--   Spinners for user-initiated actions
--   Disabled controls while submitting
+- Skeleton loaders for initial page data
+- Spinners for user-initiated actions
+- Disabled controls while submitting
+
+## Forms
+
+- Client-side validation MUST be limited to input shape and immediate feedback.
+- Business rules MUST be enforced by the backend. The client surfaces backend validation
+  errors rather than duplicating the rules.
+- Submit controls MUST be disabled while a submission is in flight.
 
 ## Authentication
 
--   Include credentials on API requests
--   Handle 401 globally (redirect to login)
--   Clear session state on logout
--   Persist session appropriately (secure http only cookies preferred)
+- Requests MUST include credentials.
+- 401 responses MUST be handled globally by redirecting to login.
+- Session state MUST be cleared on logout.
+- Sessions SHOULD be persisted in secure, `HttpOnly` cookies.
 
 ---
 
 # Verification
 
-UI verification follows the same contract as backend verification (see `verification.md`).
+UI verification follows `verification.md`. This section states the UI-specific requirements.
 
-Key principles for UI:
+## The Client Is Part of the System
 
-## The Client is Part of the System
+A frontend calling a backend API is not standalone. The frontend and backend together are
+the system under verification.
 
-A frontend calling a backend API is not standalone.
-
-The frontend and backend together are the system under verification.
-
-Internal dependencies (your frontend → your backend) **must not** be mocked.
+- Internal dependencies (your client to your backend) MUST NOT be mocked.
+- Third-party externals MAY use the lightest boundary implementation `verification.md`
+  permits.
 
 ## Seed Real Data
 
-Verify against deterministic, seeded data—not mocks.
-
-Test data should be created through the same API or database the real application uses.
+- Verification MUST run against deterministic, seeded data.
+- Seed data MUST be created through the same API or database the real application uses.
 
 ## Turnkey Delivery
 
-A single command must produce a working application:
+A single command MUST:
 
 1. Build all artifacts
 2. Start all services
 3. Seed necessary data
-4. Ready for interaction
+4. Leave the application ready for interaction
 
 If the command fails or the application is broken, the feature is incomplete.
+
+## Test Layers
+
+- Component tests MAY cover isolated rendering and interaction logic.
+- End-to-end tests MUST use Playwright.
+- End-to-end tests MUST exercise every North Star and Epic capability through the running
+  application against the real backend.
+- It MUST NOT be possible for the application to be broken for a user while the end-to-end
+  suite passes.
 
 ## Verification Checklist
 
 A UI feature is verified when:
 
--   Application starts successfully
--   User can authenticate
--   Feature is accessible and functional
--   No console errors in normal operation
--   E2E tests pass against real backend
--   Error and loading states function correctly
-
-Use playwright to exercise all of the capabilities in the North Star and Epic
-
-e2e tests should be integrated with real API calls. It should not be possible for the app to be broken for a user while passing e2e tests
+- The application starts from the single command.
+- A user can authenticate.
+- The feature is reachable and functional through the UI.
+- Loading, empty, and error states render correctly.
+- Accessibility checks pass.
+- No console errors occur in normal operation.
+- Playwright tests pass against the real backend.
 
 ---
 
 # Constraints
 
-1. **Next.js App Router** — no other frameworks
-2. **TypeScript strict** — no `any` without justification
-3. **Tailwind CSS** — no alternative styling
-4. **shadcn/ui** — no runtime component libraries
-5. **Lucide icons** — consistent iconography
-6. **API-only data** — UI never accesses database directly
-7. **Responsive design** - Desktop prioritized but mobile should not be broken
+1. **Next.js App Router** — no other framework
+2. **TypeScript strict** — `any` is prohibited; use `unknown` at boundaries and narrow
+3. **Tailwind CSS** — no alternative styling mechanism
+4. **shadcn/ui** — no runtime component library
+5. **Lucide icons** — no second icon set
+6. **API-only data** — the client never reaches the database
+7. **Responsive** — desktop is prioritized; every screen MUST remain usable down to 360px
+   with no horizontal scroll
 
 ---
 
 # Non-Goals
 
--   Offline/PWA support
--   Real-time collaboration features
--   Complex client state management (Redux, etc.)
--   Server Actions for mutations (use API)
--   Micro-frontend architecture
+- Offline and PWA support
+- Real-time collaboration
+- Client state management frameworks
+- Server Actions for mutations
+- Micro-frontend architecture
+
+---
+
+# Required Agent Plan
+
+Before implementation, produce:
+
+```text
+Routes:
+Server Components:
+Client Components:
+Shared components:
+Services:
+Providers:
+Hooks:
+Types:
+States (loading / empty / error):
+Accessibility:
+Tests:
+```
+
+Use `None` for categories that are not required.
+
+The plan MUST identify existing components, services, and hooks to reuse before introducing
+new ones.
+
+---
+
+# Required Completion Audit
+
+Before completing the change, verify:
+
+- The client reaches the backend only through `services/`.
+- No business rule was implemented in the client.
+- Server Components own server data, or an escalation is justified against the listed
+  triggers.
+- Shared components live at the correct level and are not duplicated per feature.
+- Styling uses only Tailwind utilities and semantic tokens.
+- Both themes render correctly.
+- Loading, empty, and error states exist for every async path.
+- Accessibility requirements are met and checked.
+- The application runs from the single command.
+- Playwright covers every North Star capability against the real backend.
+
+Complete the change with this summary:
+
+```text
+Routes:
+Components:
+Services:
+Providers:
+Hooks:
+Types:
+Tests:
+Accessibility notes:
+UI notes:
+```
 
 ---
 
@@ -302,6 +453,7 @@ It must be verified against the real backend.
 
 It must be delivered as a working application.
 
-Complexity in the UI creates maintenance burden without adding capability. The backend handles business logic. The UI handles presentation.
+Complexity in the UI creates maintenance burden without adding capability. The backend
+handles business logic. The UI handles presentation.
 
 Keep it simple. Keep it working.
