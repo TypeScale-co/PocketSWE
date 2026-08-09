@@ -63,9 +63,13 @@ Identify:
 - Ports
 - Adapters
 - Controllers
+- Client UI
 - Tests
 
 Determine where each responsibility belongs according to the Architecture Canon.
+
+When the feature includes a browser client, plan its routes, components, and services
+against `ui-architecture.md`.
 
 ---
 

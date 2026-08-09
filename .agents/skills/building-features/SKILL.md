@@ -20,3 +20,8 @@ the single source of truth for:
 - The Required Completion Audit, verified before completing the change
 
 Apply its MUST / SHOULD / MAY requirements exactly as written.
+
+When the feature includes a browser client, also use the
+[building-ui](../building-ui/SKILL.md) skill. `docs/architecture.md` governs the boundary
+between the client and the backend; `docs/ui-architecture.md` governs everything inside the
+client.

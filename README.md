@@ -15,6 +15,7 @@ It is packaged the way coding agents load context:
 These documents encode hard-won opinions about:
 
 -   **Architecture** - Onion architecture with explicit dependency inversion, SOLID principles, and high-cohesion modules
+-   **UI Architecture** - A constrained web client stack, accessibility floor, and data-access rules for browser clients
 -   **Verification** - End-to-end feature verification against a defined "North Star"
 -   **Work Protocol** - A structured workflow from discovery through integration
 
@@ -26,22 +27,26 @@ PocketSWE locks in the boring decisions upfront so agents can focus on solving y
 
 ## The Layout
 
-| Path                                        | Loaded             | Purpose                                                                             |
-| ------------------------------------------- | ------------------ | ----------------------------------------------------------------------------------- |
-| `AGENTS.md`                                 | Always             | Spine, dependency direction, prohibited complexity, pointers to skills and docs     |
-| `.agents/skills/planning-work/`             | When planning      | Entry point for the work protocol — references `docs/work-protocol.md`              |
-| `.agents/skills/building-features/`         | When implementing  | Entry point for feature construction — references `docs/architecture.md`            |
-| `.agents/skills/verifying-features/`        | When verifying     | Entry point for North Star verification — references `docs/verification.md`         |
-| `docs/architecture.md`                      | On demand          | Full architecture contract (layer rules in detail)                                  |
-| `docs/work-protocol.md`                     | On demand          | Full work protocol                                                                  |
-| `docs/verification.md`                      | On demand          | Full verification contract                                                          |
+| Path                                 | Loaded            | Purpose                                                                         |
+| ------------------------------------ | ----------------- | ------------------------------------------------------------------------------- |
+| `AGENTS.md`                          | Always            | Spine, dependency direction, prohibited complexity, pointers to skills and docs |
+| `.agents/skills/planning-work/`      | When planning     | Entry point for the work protocol — references `docs/work-protocol.md`          |
+| `.agents/skills/building-features/`  | When implementing | Entry point for feature construction — references `docs/architecture.md`        |
+| `.agents/skills/building-ui/`        | When building UI  | Entry point for web clients — references `docs/ui-architecture.md`              |
+| `.agents/skills/reviewing-code/`     | When reviewing    | Entry point for code review — references `docs/code-review.md`                  |
+| `.agents/skills/verifying-features/` | When verifying    | Entry point for North Star verification — references `docs/verification.md`     |
+| `docs/architecture.md`               | On demand         | Full architecture contract (layer rules in detail)                              |
+| `docs/ui-architecture.md`            | On demand         | Full UI contract (stack, structure, accessibility, UI verification)             |
+| `docs/work-protocol.md`              | On demand         | Full work protocol                                                              |
+| `docs/code-review.md`                | On demand         | Full code review contract                                                       |
+| `docs/verification.md`               | On demand         | Full verification contract                                                      |
 
 ## Usage
 
 1. Copy `AGENTS.md`, `.agents/`, and `docs/` into your project root
 2. Build — tools that support `AGENTS.md` discover the contract automatically
 
-Agents plan with `planning-work`, implement with `building-features`, and accept nothing as done until `verifying-features` passes. Tools without skill support get the same content through the `docs/` links in `AGENTS.md`.
+Agents plan with `planning-work`, implement with `building-features` (adding `building-ui` for browser clients), review with `reviewing-code`, and accept nothing as done until `verifying-features` passes. Tools without skill support get the same content through the `docs/` links in `AGENTS.md`.
 
 ### Claude users
 

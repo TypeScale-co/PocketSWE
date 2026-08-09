@@ -83,6 +83,8 @@ eliminate necessary complexity. Contain it.
   decomposition, and dependency graph; use before starting a feature or epic.
 - [building-features](.agents/skills/building-features/SKILL.md) — inside-out feature
   construction, required plan, and completion audit; use when implementing.
+- [building-ui](.agents/skills/building-ui/SKILL.md) — the constrained web client stack,
+  data access, accessibility, and UI verification; use when building a browser client.
 - [reviewing-code](.agents/skills/reviewing-code/SKILL.md) — coordinates independent
   code investigations across correctness, architecture, testing, and security.
 - [verifying-features](.agents/skills/verifying-features/SKILL.md) — end-to-end North
@@ -92,6 +94,8 @@ eliminate necessary complexity. Contain it.
 
 - [docs/architecture.md](docs/architecture.md) — complete layer rules for Domain,
   Services, Ports, Repositories, Adapters, Controller, and Utilities.
+- [docs/ui-architecture.md](docs/ui-architecture.md) — the full contract for browser
+  clients under `Clients`.
 - [docs/work-protocol.md](docs/work-protocol.md) — the full Discover→Close protocol.
 - [docs/code-review.md](docs/code-review.md) — the full code review contract.
 - [docs/verification.md](docs/verification.md) — the full verification contract.
