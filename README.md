@@ -1,3 +1,5 @@
+![PocketSWE software framework](banner.jpeg)
+
 # PocketSWE
 
 A fully opinionated set of documentation to shape AI agent builds and keep complexity contained.
