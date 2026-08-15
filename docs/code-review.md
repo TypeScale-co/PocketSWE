@@ -176,10 +176,15 @@ Inspect for issues including, but not limited to:
 -   tautological tests
 -   tests that duplicate implementation logic
 -   tests that cannot fail meaningfully
+-   nondeterministic or order-dependent tests
 -   incorrect mocks
 -   mocks that hide defects
 -   weakened or bypassed tests
 -   missing integration coverage
+
+For each critical changed behavior, alter it — flip a boundary, invert a condition, drop a branch, return a constant — and identify the test that fails.
+
+If no test fails, the behavior is unproven.
 
 Passing tests are evidence.
 
