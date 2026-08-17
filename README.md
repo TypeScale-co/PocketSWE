@@ -1,4 +1,4 @@
-![PocketSWE software framework](banner.jpeg)
+![PocketSWE software framework](banner_2.png)
 
 # PocketSWE
 

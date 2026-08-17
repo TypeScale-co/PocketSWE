@@ -100,6 +100,9 @@ Mark each step as:
 
 Maximize parallelism while preserving correctness.
 
+Before dispatch, read the steps' requirements against each other. Where two steps claim the
+same mechanism, assign it to one of them and record the decision where both will read it.
+
 ---
 
 ## 5. Execute
@@ -114,20 +117,28 @@ Each Step Agent:
 2. Reviews the Architecture Canon
 3. Reviews the Epic context
 4. Reviews the Step requirements
-5. Plans against the current codebase
+5. Plans against the current codebase, confirming any defect the requirements assert still exists
 6. Implements only its assigned step
 7. Adds appropriate tests
 8. Orchestrates code review (via `reviewing-code` skill)
-9. Resolves all blocking findings
+9. Resolves all blocking findings, each with a test that fails without the fix
 10. Submits completed step to the Epic Orchestrator
 
 Step Agents MUST NOT submit steps with unresolved blocking findings.
 
 Step Agents MUST NOT modify code outside their assigned step.
 
+Step Agents MUST NOT treat work delegated to another step as complete.
+
+Report work left undone, and defects seen outside the assigned step, to the Epic
+Orchestrator.
+
 ### Parallel Execution
 
 When steps execute in parallel, each Step Agent works in a separate worktree and branch.
+
+The Epic Orchestrator assigns each Step Agent its worktree, branch, and scratch directory.
+Agents left to choose a scratch path converge on the same conventional one.
 
 After a step's changes are accepted and integrated, the Step Agent removes its worktree and branch. Do not leave orphaned branches or worktrees.
 
@@ -139,11 +150,13 @@ The Epic Orchestrator receives completed steps from Step Agents and integrates t
 
 After integration, the Epic Orchestrator:
 
-1. Orchestrates code review of the integrated feature (via `reviewing-code` skill)
-2. Resolves all blocking findings
-3. Verifies no conflicts between steps
-4. Verifies no architectural violations introduced by integration
-5. Verifies combined behavior matches the North Star
+1. Assigns the work each step reported as undone to a named step, or records it as a
+   known limitation
+2. Orchestrates code review of the integrated feature (via `reviewing-code` skill)
+3. Resolves all blocking findings, each with a test that fails without the fix
+4. Verifies no conflicts between steps
+5. Verifies no architectural violations introduced by integration
+6. Verifies combined behavior matches the North Star
 
 Do not proceed to Close with unresolved blocking findings.
 

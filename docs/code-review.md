@@ -71,7 +71,8 @@ Every Reviewer MUST:
 
 Reviewers MUST NOT:
 
--   modify the implementation
+-   modify the shared working tree
+-   repair the defects they find
 -   speculate
 -   report stylistic preferences as defects
 -   investigate domains assigned to other Reviewers unless a discovered issue directly crosses domains
@@ -185,6 +186,8 @@ Inspect for issues including, but not limited to:
 For each critical changed behavior, alter it — flip a boundary, invert a condition, drop a branch, return a constant — and identify the test that fails.
 
 If no test fails, the behavior is unproven.
+
+Make these alterations in an isolated copy and discard them. Reviewers run concurrently, and another Reviewer will read a live edit in the shared tree and report it as a defect.
 
 Passing tests are evidence.
 

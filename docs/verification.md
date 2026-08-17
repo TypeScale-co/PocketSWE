@@ -227,6 +227,7 @@ The driver MUST:
 - Report failures clearly
 - Return a failing exit status when expectations are not met
 - Be repeatable without manual intervention
+- Be proven to fail when the system does
 
 The driver SHOULD live with the repository and remain reusable.
 
