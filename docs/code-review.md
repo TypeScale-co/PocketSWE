@@ -267,6 +267,8 @@ If no findings exist:
 Findings: None
 ```
 
+A finding's severity MUST be stated in the `Severity:` field of that finding's entry.
+
 Reviewers MUST NOT assign PASS, REVISE, or ESCALATE.
 
 Only the Review Coordinator produces the final review result.
