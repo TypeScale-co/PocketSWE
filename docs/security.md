@@ -20,27 +20,22 @@ the rules below.
 
 ## How to use this canon
 
-- A MUST is a required security property unless the North Star explicitly makes it
+- A MUST is a required security property unless the requirements explicitly make it
   inapplicable.
 - A MUST NOT is prohibited.
-- A security finding must name the changed or reachable code, the trigger, the
-  unintended behavior, and the impact.
+- A SHOULD is expected; a deviation needs a stated reason.
+- Findings follow the Security Reviewer contract in `code-review.md`.
 - A reviewer may follow a data flow beyond the implementation diff when the diff
   changes a boundary or a caller's authority.
-- A failure in authentication, authorization, validation, isolation, or integrity
-  checking MUST fail closed. An unavailable check MUST NOT become an allow decision.
 
-## 1. Threat model and boundaries
+## 1. Trust boundaries
 
-- The North Star or implementation plan MUST identify the important assets, actors,
-  trust boundaries, and security-relevant assumptions for a feature that handles
-  credentials, sensitive data, external input, privileged operations, or code
-  execution.
 - Every input crossing a process, network, user, file, plugin, agent, or privilege
   boundary MUST be treated as untrusted until validated.
-- The implementation MUST name where validation, authentication, authorization,
-  and normalization occur. A caller's claim that it already checked something is
-  not proof at a new boundary.
+- For each boundary the implementation handles, validation, authentication,
+  authorization, and normalization MUST each have one identifiable location in the
+  code. A caller's claim that it already checked something is not proof at a new
+  boundary.
 - The implementation MUST preserve the narrowest authority needed for each actor,
   component, process, and credential.
 - A failure in authentication, authorization, validation, isolation, or integrity
@@ -57,7 +52,7 @@ the rules below.
 - Privileged operations MUST have one clearly owned authorization path. A legacy or
   sibling endpoint MUST NOT bypass the rules of the newer path.
 - Credentials, tokens, and session identifiers MUST be protected in transit and at
-  rest according to the application's declared threat model.
+  rest.
 - Secrets MUST NOT be accepted in URLs, committed to source, embedded in fixtures,
   written to logs, or returned in ordinary error responses.
 
@@ -83,11 +78,11 @@ the rules below.
 
 ## 4. Data, secrets, errors, and logging
 
-- The implementation MUST classify the sensitive data it handles and minimize
-  collection, retention, copying, and exposure.
+- The implementation MUST minimize collection, retention, copying, and exposure of
+  sensitive data.
 - Secrets and sensitive values MUST NOT appear in source control, prompts, generated
   instructions, logs, traces, metrics, crash reports, or test output unless the
-  North Star explicitly requires a protected representation.
+  requirements explicitly call for a protected representation.
 - Logs SHOULD record the security-relevant event and actor without recording the
   secret or unnecessary sensitive payload.
 - Error responses MUST be useful to the intended caller without exposing credentials,
@@ -98,11 +93,10 @@ the rules below.
 
 ## 5. Resources and isolation
 
-- Every externally controlled operation MUST have explicit bounds on time, memory,
-  input size, output size, recursion, concurrency, retries, or other resources that
-  can be exhausted.
-- The implementation MUST avoid unbounded buffering, pagination, fan-out, retries,
-  polling, or recursive work based on attacker-controlled values.
+- Work driven by externally controlled values MUST be bounded. Input size, output
+  size, time, memory, buffering, recursion, concurrency, fan-out, pagination,
+  retries, and polling each need a limit wherever an attacker could otherwise drive
+  them without bound.
 - Code execution, file access, network access, and subprocess authority MUST be
   limited to the smallest scope the feature requires.
 - A sandbox or isolation boundary MUST be enforced by the mechanism that owns the
@@ -132,10 +126,6 @@ the rules below.
 - Tests MUST exercise the boundary that matters: authorization through the protected
   operation, path confinement through the filesystem boundary, and safe output
   through the response or sink.
-- A reviewer MUST trace at least one credible trigger-to-impact path for every
-  finding and cite the code that makes the path possible.
-- A finding based only on a generic possibility, without a reachable trigger and
-  concrete impact, is not a finding.
 
 ## 8. Optional deployment profiles
 
@@ -145,8 +135,8 @@ A deployment profile adds requirements; it does not weaken this canon.
   system components in scope, inherited controls, and required evidence.
 - Platform, container, operating-system, network, and application STIGs are separate
   scopes. Passing a source-code review does not establish their configuration.
-- The Security Reviewer may flag a missing profile decision when the North Star
-  requires one, but MUST NOT claim that a source diff proves formal STIG compliance.
+- The Security Reviewer may flag a missing profile decision when the requirements
+  call for one, but MUST NOT claim that a source diff proves formal STIG compliance.
 - ASVS-derived requirements SHOULD be selected according to the application's
   exposure and data sensitivity rather than copied indiscriminately into unrelated
   projects.

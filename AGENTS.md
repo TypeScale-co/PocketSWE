@@ -98,5 +98,5 @@ eliminate necessary complexity. Contain it.
   clients under `Clients`.
 - [docs/work-protocol.md](docs/work-protocol.md) — the full Discover→Close protocol.
 - [docs/code-review.md](docs/code-review.md) — the full code review contract.
-- [docs/security.md](docs/security.md) — the project security canon used by Security Reviewers.
+- [docs/security.md](docs/security.md) — the security canon for implementers and Security Reviewers.
 - [docs/verification.md](docs/verification.md) — the full verification contract.

@@ -44,6 +44,39 @@ Evidence determines correctness.
 
 ---
 
+# Review Schedule
+
+The review target determines which Reviewers are required.
+
+## Step Review
+
+A Step Agent reviewing its own step launches:
+
+-   Correctness Reviewer
+-   Test Reviewer
+
+Architecture and Security are judged at integration, where the Reviewer sees the whole feature. Add either to a step review only when:
+
+-   the Epic Orchestrator requested it for that step, or
+-   the step meets that Reviewer's step-level launch condition
+
+Added Reviewers never replace the Correctness or Test Reviewer.
+
+## Integration Review
+
+The Epic Orchestrator reviewing the integrated feature launches all four Reviewers:
+
+-   Correctness Reviewer
+-   Architecture Reviewer
+-   Test Reviewer
+-   Security Reviewer
+
+The integration review target is the combined diff. Reviewers examine the seams between steps and every North Star acceptance criterion.
+
+Passing step reviews are not evidence that the integrated feature is correct.
+
+---
+
 # Review Target
 
 The Review Coordinator provides:
@@ -52,8 +85,7 @@ The Review Coordinator provides:
 -   North Star
 -   requirements
 -   Architecture Canon
--   Security Canon (`security.md`) for the Security Reviewer, when the methodology
-    provides one
+-   Security Canon (`security.md`), for the Security Reviewer
 
 Reviewers are responsible for gathering any additional repository context required to complete their investigation.
 
@@ -128,6 +160,8 @@ Every finding MUST identify:
 Determine whether the implementation preserves the Architecture Canon.
 
 For browser client code, the Architecture Canon includes `ui-architecture.md`.
+
+Add this Reviewer to a step review when the step introduces a Port, layer, or shared mechanism that other steps build on.
 
 Inspect for issues including, but not limited to:
 
@@ -205,22 +239,17 @@ Every finding MUST identify the behavior that remains unproven.
 
 > **Can an untrusted actor make the system behave in an unintended way?**
 
-Review the implementation against the project's Security Canon, `security.md`,
-when the governing methodology provides one. The canon defines the security
-properties being judged; this document defines the review process and report shape.
-Use the canon's deployment-profile boundary when a project names STIG or another
-compliance profile. Do not claim formal compliance from a source review.
+Judge the implementation against the Security Canon, `security.md`. The canon defines the security properties being judged; this document defines the review process and report shape.
 
-Launch this Reviewer whenever the implementation changes:
+Do not claim formal compliance from a source review.
+
+Add this Reviewer to a step review when the step changes:
 
 -   trust boundaries
 -   authentication
 -   authorization
--   externally controlled input
--   sensitive data
 -   secrets
 -   isolation
--   resource limits
 
 Inspect for issues including, but not limited to:
 
