@@ -18,7 +18,9 @@ The Review Coordinator MUST NOT perform the primary review itself.
 
 Instead, the Review Coordinator coordinates independent investigations performed by fresh-context sub-agents.
 
-Every investigation defined in this document MUST be assigned to exactly one independent Reviewer.
+Every required investigation MUST be assigned to exactly one independent Reviewer.
+
+The workflow invoking the review names the required Reviewers. When it names none, all four are required.
 
 Every Reviewer:
 
@@ -41,39 +43,6 @@ The Review Coordinator:
 Reviewer agreement is not evidence.
 
 Evidence determines correctness.
-
----
-
-# Review Schedule
-
-The review target determines which Reviewers are required.
-
-## Step Review
-
-A Step Agent reviewing its own step launches:
-
--   Correctness Reviewer
--   Test Reviewer
-
-Architecture and Security are judged at integration, where the Reviewer sees the whole feature. Add either to a step review only when:
-
--   the Epic Orchestrator requested it for that step, or
--   the step meets that Reviewer's step-level launch condition
-
-Added Reviewers never replace the Correctness or Test Reviewer.
-
-## Integration Review
-
-The Epic Orchestrator reviewing the integrated feature launches all four Reviewers:
-
--   Correctness Reviewer
--   Architecture Reviewer
--   Test Reviewer
--   Security Reviewer
-
-The integration review target is the combined diff. Reviewers examine the seams between steps and every North Star acceptance criterion.
-
-Passing step reviews are not evidence that the integrated feature is correct.
 
 ---
 
@@ -161,8 +130,6 @@ Determine whether the implementation preserves the Architecture Canon ([architec
 
 For browser client code, the Architecture Canon includes [ui-architecture.md](ui-architecture.md).
 
-Add this Reviewer to a step review when the step introduces a Port, layer, or shared mechanism that other steps build on.
-
 Inspect for issues including, but not limited to:
 
 -   dependency violations
@@ -242,14 +209,6 @@ Every finding MUST identify the behavior that remains unproven.
 Judge the implementation against the Security Canon, [security.md](security.md). The canon defines the security properties being judged; this document defines the review process and report shape.
 
 Do not claim formal compliance from a source review.
-
-Add this Reviewer to a step review when the step changes:
-
--   trust boundaries
--   authentication
--   authorization
--   secrets
--   isolation
 
 Inspect for issues including, but not limited to:
 

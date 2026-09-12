@@ -31,9 +31,22 @@ Epic Orchestrator
 
 The **Epic Orchestrator** owns the epic from discovery through close. It spawns Step Agents, receives their completed work, integrates, reviews the integrated result, verifies, and closes.
 
-Each **Step Agent** is a fresh-context sub-agent responsible for one implementation step. It implements, runs the project's tests, orchestrates a step review (Correctness and Test), resolves blocking findings, and submits the completed step back to the Epic Orchestrator. Architecture and Security are reviewed on the integrated feature unless a step is escalated.
+Each **Step Agent** is a fresh-context sub-agent responsible for one implementation step. It implements, runs the project's tests, orchestrates a Step Review, resolves blocking findings, and submits the completed step back to the Epic Orchestrator.
 
 **Reviewer Sub-agents** are fresh-context sub-agents spawned by either a Step Agent or the Epic Orchestrator to perform independent code review investigations.
+
+### Review Schedule
+
+Each review runs through the `reviewing-code` skill, which defines how a review is conducted. This protocol defines which Reviewers each review requires.
+
+**Step Review** — Correctness and Test. Add a Reviewer only when the step warrants it:
+
+- Architecture, when the step introduces a Port, layer, or shared mechanism that other steps build on
+- Security, when the step changes trust boundaries, authentication, authorization, secrets, or isolation
+
+Added Reviewers never replace Correctness or Test.
+
+**Integration Review** — Correctness, Architecture, Test, and Security, on the combined diff. Reviewers examine the seams between steps and every North Star acceptance criterion. Passing Step Reviews are not evidence that the integrated feature is correct.
 
 ---
 
@@ -106,9 +119,8 @@ Maximize parallelism while preserving correctness.
 Before dispatch, read the steps' requirements against each other. Where two steps claim the
 same mechanism, assign it to one of them and record the decision where both will read it.
 
-Name any step that needs Architecture or Security review at step level—typically a
-step that establishes a mechanism later steps build on—in that step's requirements.
-See the Review Schedule in [code-review.md](code-review.md).
+Where a step meets a Step Review condition for Architecture or Security, name the added
+Reviewer in that step's requirements.
 
 ---
 
@@ -121,15 +133,15 @@ The Epic Orchestrator spawns one Step Agent (sub-agent) per implementation step.
 Each Step Agent:
 
 1. Reviews the North Star
-2. Reviews the Architecture Canon ([architecture.md](architecture.md)), and the Security Canon
-   ([security.md](security.md)) when the step handles
-   untrusted input, identity, secrets, or isolation
+2. Reviews the Architecture Canon ([architecture.md](architecture.md)), and the Security
+   Canon ([security.md](security.md)) when the step changes trust boundaries,
+   authentication, authorization, secrets, or isolation
 3. Reviews the Epic context
 4. Reviews the Step requirements
 5. Plans against the current codebase, confirming any defect the requirements assert still exists
 6. Implements only its assigned step
 7. Adds appropriate tests
-8. Orchestrates the step review (via `reviewing-code` skill)
+8. Orchestrates the Step Review (via `reviewing-code` skill)
 9. Resolves all blocking findings, each with a test that fails without the fix
 10. Submits completed step to the Epic Orchestrator
 
@@ -161,8 +173,7 @@ After integration, the Epic Orchestrator:
 
 1. Assigns the work each step reported as undone to a named step, or records it as a
    known limitation
-2. Orchestrates the integration review of the integrated feature (via `reviewing-code`
-   skill)
+2. Orchestrates the Integration Review (via `reviewing-code` skill)
 3. Resolves all blocking findings, each with a test that fails without the fix
 4. Verifies no conflicts between steps
 5. Verifies no architectural violations introduced by integration

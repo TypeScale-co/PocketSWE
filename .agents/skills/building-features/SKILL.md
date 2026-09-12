@@ -22,10 +22,11 @@ the single source of truth for:
 Apply its MUST / SHOULD / MAY requirements exactly as written.
 
 When the feature includes a browser client, also use the
-[building-ui](../building-ui/SKILL.md) skill. [docs/architecture.md](../../../docs/architecture.md) governs the boundary
-between the client and the backend; [docs/ui-architecture.md](../../../docs/ui-architecture.md) governs everything inside the
-client.
+[building-ui](../building-ui/SKILL.md) skill.
+[docs/architecture.md](../../../docs/architecture.md) governs the boundary between the
+client and the backend; [docs/ui-architecture.md](../../../docs/ui-architecture.md)
+governs everything inside the client.
 
-When the change handles untrusted input, identity, authorization, secrets, or isolation,
-also follow [docs/security.md](../../../docs/security.md). Security is reviewed on the
-integrated feature, so build it in from the start rather than relying on step review.
+When the work changes trust boundaries, authentication, authorization, secrets, or
+isolation, also follow [docs/security.md](../../../docs/security.md). Build security in from the start rather
+than relying on review to find its absence.
