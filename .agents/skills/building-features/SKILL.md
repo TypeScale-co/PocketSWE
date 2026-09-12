@@ -28,5 +28,5 @@ client and the backend; [docs/ui-architecture.md](../../../docs/ui-architecture.
 governs everything inside the client.
 
 When the work changes trust boundaries, authentication, authorization, secrets, or
-isolation, also follow [docs/security.md](../../../docs/security.md). Build security in from the start rather
-than relying on review to find its absence.
+isolation, also follow [docs/security.md](../../../docs/security.md). Build security in
+from the start rather than relying on review to find its absence.
