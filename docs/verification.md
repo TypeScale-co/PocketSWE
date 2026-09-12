@@ -30,7 +30,7 @@ Before verification begins, review:
 - Epic context
 - Step requirements
 - Acceptance criteria
-- Architecture Canon
+- Architecture Canon ([architecture.md](architecture.md))
 - Existing tests and system interfaces
 
 Extract the behavior that must be demonstrated.
@@ -196,7 +196,7 @@ Do not bypass the Controller by invoking Services directly for end-to-end verifi
 
 Service-level tests support verification but do not replace it.
 
-When the entry point is a browser client, `ui-architecture.md` states the additional
+When the entry point is a browser client, [ui-architecture.md](ui-architecture.md) states the additional
 UI-specific requirements: internal client-to-backend dependencies are never mocked, the
 application must start from a single command, and Playwright must cover every North Star
 capability against the real backend.

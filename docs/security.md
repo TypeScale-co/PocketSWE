@@ -4,8 +4,8 @@
 
 This document defines what secure implementation means under PocketSWE. It is the
 Security Reviewer's canon and a secure-by-default design guide for the writing agent.
-It complements `code-review.md`: that document defines how a review is conducted and
-reported; this document defines the security properties being judged.
+It complements [code-review.md](code-review.md): that document defines how a review
+is conducted and reported; this document defines the security properties being judged.
 
 This is a software security baseline, not a penetration test, a formal assessment,
 an authorization to operate, or a claim of compliance with a deployment standard.
@@ -24,7 +24,7 @@ the rules below.
   inapplicable.
 - A MUST NOT is prohibited.
 - A SHOULD is expected; a deviation needs a stated reason.
-- Findings follow the Security Reviewer contract in `code-review.md`.
+- Findings follow the Security Reviewer contract in [code-review.md](code-review.md).
 - A reviewer may follow a data flow beyond the implementation diff when the diff
   changes a boundary or a caller's authority.
 

@@ -22,8 +22,8 @@ the single source of truth for:
 Apply its MUST / SHOULD / MAY requirements exactly as written.
 
 When the feature includes a browser client, also use the
-[building-ui](../building-ui/SKILL.md) skill. `docs/architecture.md` governs the boundary
-between the client and the backend; `docs/ui-architecture.md` governs everything inside the
+[building-ui](../building-ui/SKILL.md) skill. [docs/architecture.md](../../../docs/architecture.md) governs the boundary
+between the client and the backend; [docs/ui-architecture.md](../../../docs/ui-architecture.md) governs everything inside the
 client.
 
 When the change handles untrusted input, identity, authorization, secrets, or isolation,

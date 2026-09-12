@@ -84,8 +84,8 @@ The Review Coordinator provides:
 -   implementation diff
 -   North Star
 -   requirements
--   Architecture Canon
--   Security Canon (`security.md`), for the Security Reviewer
+-   Architecture Canon ([architecture.md](architecture.md))
+-   Security Canon ([security.md](security.md)), for the Security Reviewer
 
 Reviewers are responsible for gathering any additional repository context required to complete their investigation.
 
@@ -157,9 +157,9 @@ Every finding MUST identify:
 
 > **What architectural constraint does this implementation threaten?**
 
-Determine whether the implementation preserves the Architecture Canon.
+Determine whether the implementation preserves the Architecture Canon ([architecture.md](architecture.md)).
 
-For browser client code, the Architecture Canon includes `ui-architecture.md`.
+For browser client code, the Architecture Canon includes [ui-architecture.md](ui-architecture.md).
 
 Add this Reviewer to a step review when the step introduces a Port, layer, or shared mechanism that other steps build on.
 
@@ -239,7 +239,7 @@ Every finding MUST identify the behavior that remains unproven.
 
 > **Can an untrusted actor make the system behave in an unintended way?**
 
-Judge the implementation against the Security Canon, `security.md`. The canon defines the security properties being judged; this document defines the review process and report shape.
+Judge the implementation against the Security Canon, [security.md](security.md). The canon defines the security properties being judged; this document defines the review process and report shape.
 
 Do not claim formal compliance from a source review.
 

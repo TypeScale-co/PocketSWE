@@ -3,10 +3,10 @@
 This contract governs **browser-based user interface** construction. It defines the stack,
 patterns, and structure for web clients that consume backend APIs.
 
-A web client is a `Clients` entry in the Architecture Canon. `architecture.md` governs the
+A web client is a `Clients` entry in the Architecture Canon. [architecture.md](architecture.md) governs the
 client's relationship to the backend; this contract governs the client's internals.
 
-For verification requirements, see `verification.md`. The UI is part of the system — not a
+For verification requirements, see [verification.md](verification.md). The UI is part of the system — not a
 separate application.
 
 ## Objective
@@ -313,7 +313,7 @@ Every async operation MUST show feedback:
 
 # Verification
 
-UI verification follows `verification.md`. This section states the UI-specific requirements.
+UI verification follows [verification.md](verification.md). This section states the UI-specific requirements.
 
 ## The Client Is Part of the System
 
@@ -321,7 +321,7 @@ A frontend calling a backend API is not standalone. The frontend and backend tog
 the system under verification.
 
 - Internal dependencies (your client to your backend) MUST NOT be mocked.
-- Third-party externals MAY use the lightest boundary implementation `verification.md`
+- Third-party externals MAY use the lightest boundary implementation [verification.md](verification.md)
   permits.
 
 ## Seed Real Data

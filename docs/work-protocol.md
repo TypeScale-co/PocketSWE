@@ -69,10 +69,10 @@ Identify:
 - Client UI
 - Tests
 
-Determine where each responsibility belongs according to the Architecture Canon.
+Determine where each responsibility belongs according to the Architecture Canon ([architecture.md](architecture.md)).
 
 When the feature includes a browser client, plan its routes, components, and services
-against `ui-architecture.md`.
+against [ui-architecture.md](ui-architecture.md).
 
 ---
 
@@ -108,7 +108,7 @@ same mechanism, assign it to one of them and record the decision where both will
 
 Name any step that needs Architecture or Security review at step level—typically a
 step that establishes a mechanism later steps build on—in that step's requirements.
-See the Review Schedule in `code-review.md`.
+See the Review Schedule in [code-review.md](code-review.md).
 
 ---
 
@@ -121,7 +121,8 @@ The Epic Orchestrator spawns one Step Agent (sub-agent) per implementation step.
 Each Step Agent:
 
 1. Reviews the North Star
-2. Reviews the Architecture Canon, and the Security Canon when the step handles
+2. Reviews the Architecture Canon ([architecture.md](architecture.md)), and the Security Canon
+   ([security.md](security.md)) when the step handles
    untrusted input, identity, secrets, or isolation
 3. Reviews the Epic context
 4. Reviews the Step requirements
