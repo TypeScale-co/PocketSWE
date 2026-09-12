@@ -52,6 +52,8 @@ The Review Coordinator provides:
 -   North Star
 -   requirements
 -   Architecture Canon
+-   Security Canon (`security.md`) for the Security Reviewer, when the methodology
+    provides one
 
 Reviewers are responsible for gathering any additional repository context required to complete their investigation.
 
@@ -202,6 +204,12 @@ Every finding MUST identify the behavior that remains unproven.
 **Ask:**
 
 > **Can an untrusted actor make the system behave in an unintended way?**
+
+Review the implementation against the project's Security Canon, `security.md`,
+when the governing methodology provides one. The canon defines the security
+properties being judged; this document defines the review process and report shape.
+Use the canon's deployment-profile boundary when a project names STIG or another
+compliance profile. Do not claim formal compliance from a source review.
 
 Launch this Reviewer whenever the implementation changes:
 

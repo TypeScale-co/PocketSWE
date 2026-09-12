@@ -7,11 +7,7 @@ Epic Orchestrator
     │
     ├── Step Agent (sub-agent)
     │       │
-    │       └── Reviewer Sub-agents
-    │               Correctness
-    │               Architecture
-    │               Test
-    │               Security
+    │       └── Correctness Reviewer
     │
     ├── Step Agent (sub-agent)
     │       │
@@ -22,13 +18,17 @@ Epic Orchestrator
     After all steps submit:
     │
     ├── Reviewer Sub-agents (integrated feature)
+    │       Correctness
+    │       Architecture
+    │       Test
+    │       Security
     │
     └── Feature Verification
 ```
 
 The **Epic Orchestrator** owns the epic from discovery through close. It spawns Step Agents, receives their completed work, integrates, reviews the integrated result, verifies, and closes.
 
-Each **Step Agent** is a fresh-context sub-agent responsible for one implementation step. It implements, orchestrates its own code review (spawning Reviewer sub-agents), resolves findings, and submits the completed step back to the Epic Orchestrator.
+Each **Step Agent** is a fresh-context sub-agent responsible for one implementation step. It implements, runs the project's tests, orchestrates one focused Correctness Review, resolves blocking findings, and submits the completed step back to the Epic Orchestrator. The Epic Orchestrator may escalate an exceptional step by adding one or more explicitly requested specialist Reviews—Architecture, Test, or Security—in addition to the normal Correctness Review.
 
 **Reviewer Sub-agents** are fresh-context sub-agents spawned by either a Step Agent or the Epic Orchestrator to perform independent code review investigations.
 
@@ -103,6 +103,11 @@ Maximize parallelism while preserving correctness.
 Before dispatch, read the steps' requirements against each other. Where two steps claim the
 same mechanism, assign it to one of them and record the decision where both will read it.
 
+The Epic Orchestrator may escalate an exceptional step by adding any specialist
+reviewer the step's risk warrants. The escalation is additive: it never removes the
+step's Correctness Review. The specialist's parent-scoped review activity makes the
+escalation visible in the build record.
+
 ---
 
 ## 5. Execute
@@ -120,7 +125,9 @@ Each Step Agent:
 5. Plans against the current codebase, confirming any defect the requirements assert still exists
 6. Implements only its assigned step
 7. Adds appropriate tests
-8. Orchestrates code review (via `reviewing-code` skill)
+8. Orchestrates one focused Correctness Review of the step (via `reviewing-code`
+   skill), plus any specialist Reviews the Epic Orchestrator explicitly escalated
+   for this step.
 9. Resolves all blocking findings, each with a test that fails without the fix
 10. Submits completed step to the Epic Orchestrator
 
@@ -152,11 +159,16 @@ After integration, the Epic Orchestrator:
 
 1. Assigns the work each step reported as undone to a named step, or records it as a
    known limitation
-2. Orchestrates code review of the integrated feature (via `reviewing-code` skill)
+2. Orchestrates the complete independent review board—Correctness, Architecture,
+   Test, and Security—of the integrated feature (via `reviewing-code` skill)
 3. Resolves all blocking findings, each with a test that fails without the fix
 4. Verifies no conflicts between steps
 5. Verifies no architectural violations introduced by integration
 6. Verifies combined behavior matches the North Star
+
+The integrated review reads the combined diff, the seams between steps, and every
+North Star acceptance criterion. Green step reviews are not evidence that the
+integrated feature is correct.
 
 Do not proceed to Close with unresolved blocking findings.
 
