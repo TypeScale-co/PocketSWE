@@ -10,7 +10,7 @@ Epic Orchestrator
     │       └── Reviewer Sub-agents (step)
     │               Correctness
     │               Test
-    │               (+ Architecture / Security when escalated)
+    │               (+ Architecture / Security when added)
     │
     ├── Step Agent (sub-agent)
     │       │
@@ -119,8 +119,8 @@ Maximize parallelism while preserving correctness.
 Before dispatch, read the steps' requirements against each other. Where two steps claim the
 same mechanism, assign it to one of them and record the decision where both will read it.
 
-Where a step meets a Step Review condition for Architecture or Security, name the added
-Reviewer in that step's requirements.
+Name each step's Step Review Reviewers in its requirements: Correctness, Test, and
+Architecture or Security where the step meets that Reviewer's condition.
 
 ---
 
