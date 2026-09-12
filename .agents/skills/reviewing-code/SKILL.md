@@ -16,3 +16,5 @@ Read [docs/code-review.md](../../../docs/code-review.md) and follow it directly.
 -   Reviewer responsibilities and constraints
 -   Required output format and severity definitions
 -   Consolidation rules and final result criteria
+
+The Security Reviewer judges against [docs/security.md](../../../docs/security.md).

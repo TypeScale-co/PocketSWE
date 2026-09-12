@@ -41,6 +41,7 @@ PocketSWE locks in the boring decisions upfront so agents can focus on solving y
 | `docs/ui-architecture.md`            | On demand         | Full UI contract (stack, structure, accessibility, UI verification)             |
 | `docs/work-protocol.md`              | On demand         | Full work protocol                                                              |
 | `docs/code-review.md`                | On demand         | Full code review contract                                                       |
+| `docs/security.md`                   | On demand         | Security canon for implementation and Security Review                           |
 | `docs/verification.md`               | On demand         | Full verification contract                                                      |
 
 ## Usage
