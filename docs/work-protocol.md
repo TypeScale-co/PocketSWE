@@ -142,10 +142,14 @@ Each Step Agent:
 6. Implements only its assigned step
 7. Adds appropriate tests
 8. Orchestrates the Step Review (via `reviewing-code` skill)
-9. Resolves all blocking findings, each with a test that fails without the fix
+9. Resolves all blocking findings, each with a test that fails without the fix,
+   and says so explicitly against the finding's own id
 10. Submits completed step to the Epic Orchestrator
 
-Step Agents MUST NOT submit steps with unresolved blocking findings.
+Step Agents MUST NOT submit steps with unresolved blocking findings. A blocking
+finding is resolved explicitly, against the id it was reported under, before the
+step is submitted: a finding fixed and never named again reads afterwards exactly
+like one left open.
 
 Step Agents MUST NOT modify code outside their assigned step.
 
@@ -174,7 +178,8 @@ After integration, the Epic Orchestrator:
 1. Assigns the work each step reported as undone to a named step, or records it as a
    known limitation
 2. Orchestrates the Integration Review (via `reviewing-code` skill)
-3. Resolves all blocking findings, each with a test that fails without the fix
+3. Resolves all blocking findings, each with a test that fails without the fix,
+   and says so explicitly against the finding's own id
 4. Verifies no conflicts between steps
 5. Verifies no architectural violations introduced by integration
 6. Verifies combined behavior matches the North Star
