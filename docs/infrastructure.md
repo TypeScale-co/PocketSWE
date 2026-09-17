@@ -8,6 +8,42 @@
 
 **Normative companion documents:** [artifact builds](infrastructure-artifact-builds.md), [workload runtime](infrastructure-workload-runtime.md), [provisioning](infrastructure-provisioning.md), [host configuration](infrastructure-host-configuration.md), [environment selection](infrastructure-environments.md), and the [acceptance matrix](infrastructure-acceptance-matrix.md).
 
+## Binding support status
+
+The canon defines the contract; a binding earns a stronger status only with the
+evidence named here. The initial adoption records every binding as **proposed**.
+
+| Binding | Status | Completion evidence |
+| --- | --- | --- |
+| Docker/BuildKit artifact | proposed | IMG-01 through IMG-05 and applicable C/A cases on a designated runner |
+| Docker Compose workload | proposed | RUN-01 through RUN-06 and applicable C/W cases on an identified target |
+| Terraform provisioning | proposed | PROV-01 through PROV-05, TF-01 through TF-05, and applicable C/P cases |
+| CloudFormation provisioning | proposed | PROV-01 through PROV-05, CF-01 through CF-05, and applicable C/P cases |
+| Bicep/ARM provisioning | proposed | PROV-01 through PROV-05, BCP-01 through BCP-05, and applicable C/P cases |
+| Ansible host configuration | proposed | HOST-01 through HOST-06 and applicable C/H cases on a selected host |
+
+**Implemented** means the binding's bounded behavior exists in an owned
+implementation. **Verified** additionally requires the applicable acceptance matrix
+and target evidence. This canon adoption implements no runner or binding, so it does
+not promote any row above proposed.
+
+## Synchronization procedure
+
+The PocketSWE maintainers own this canon. A consumer synchronizes only a reviewed
+source revision and records the revision, version, file set, and SHA-256 digest of
+each copied document. The procedure is:
+
+1. Resolve the source revision and confirm its owner and review state.
+2. Copy the complete `docs/infrastructure*.md` set without editing the copied files.
+3. Compare every copied file byte-for-byte with the source revision and fail on a
+   missing or changed file.
+4. Run the canon's reference, applicability, and acceptance-matrix checks.
+5. Retain the manifest beside the consumer copy; a later source revision requires a
+   new review and manifest rather than silent drift.
+
+The CE consumer records this boundary in `docs/infrastructure-manifest.json` and
+uses its `pocketswe:sync`, `pocketswe:diff`, and `infrastructure:check` procedures.
+
 ## Purpose
 
 Build, prepare, change, and operate infrastructure through explicit ownership, bounded authority, reproducible inputs, and executable evidence. A maintainer should be able to identify what will change, where it will change, why it is permitted, how success will be observed, and how interruption will be recovered.
