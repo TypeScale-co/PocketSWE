@@ -17,7 +17,7 @@ This canon complements the Security and Architecture Canons. It applies to build
 ## How to use this canon
 
 - MUST is required for an applicable operation; MUST NOT is prohibited. SHOULD is expected and a departure needs a recorded reason.
-- Select the common rules and the relevant [profiles](README.md). Every required rule needs a check or an explicit evidence obligation. Filename detection may suggest a profile; it cannot grant execution authority or silently select a target.
+- Select the common rules and the relevant [profiles and environment declarations](infrastructure-environments.md). Every required rule needs a check or an explicit evidence obligation. Filename detection may suggest a profile; it cannot grant execution authority or silently select a target.
 - A rule may be inapplicable only with an explicit scope-based reason. Missing tools, credentials, permissions, or evidence are not inapplicability.
 - A stricter environment or security profile adds requirements. Conflicting requirements block the affected operation until resolved; an agent cannot choose whichever is easier.
 - Review findings use the existing review contract and severity vocabulary. Rule identifiers below provide traceability; they are not a new scoring system.
