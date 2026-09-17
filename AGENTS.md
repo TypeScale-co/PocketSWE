@@ -99,3 +99,5 @@ eliminate necessary complexity. Contain it.
 - [docs/work-protocol.md](docs/work-protocol.md) — the full Discover→Close protocol.
 - [docs/code-review.md](docs/code-review.md) — the full code review contract.
 - [docs/verification.md](docs/verification.md) — the full verification contract.
+- [docs/infrastructure.md](docs/infrastructure.md) — the infrastructure canon and
+  applicable operation-family profiles.

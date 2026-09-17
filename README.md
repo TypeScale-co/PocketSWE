@@ -19,7 +19,8 @@ These documents encode hard-won opinions about:
 -   **Architecture** - Onion architecture with explicit dependency inversion, SOLID principles, and high-cohesion modules
 -   **UI Architecture** - A constrained web client stack, accessibility floor, and data-access rules for browser clients
 -   **Verification** - End-to-end feature verification against a defined "North Star"
--   **Work Protocol** - A structured workflow from discovery through integration
+-   **Work Protocol** — A structured workflow from discovery through integration
+-   **Infrastructure Canon** — Common rules and operation-family profiles for bounded infrastructure work
 
 ## Why This Exists
 
@@ -42,13 +43,15 @@ PocketSWE locks in the boring decisions upfront so agents can focus on solving y
 | `docs/work-protocol.md`              | On demand         | Full work protocol                                                              |
 | `docs/code-review.md`                | On demand         | Full code review contract                                                       |
 | `docs/verification.md`               | On demand         | Full verification contract                                                      |
+| `docs/infrastructure.md`             | On demand         | Common infrastructure canon and authority boundary                             |
+| `docs/infrastructure-*.md`          | On demand         | Artifact, workload, provisioning, host, environment, and acceptance profiles   |
 
 ## Usage
 
 1. Copy `AGENTS.md`, `.agents/`, and `docs/` into your project root
 2. Build — tools that support `AGENTS.md` discover the contract automatically
 
-Agents plan with `planning-work`, implement with `building-features` (adding `building-ui` for browser clients), review with `reviewing-code`, and accept nothing as done until `verifying-features` passes. Tools without skill support get the same content through the `docs/` links in `AGENTS.md`.
+Agents plan with `planning-work`, implement with `building-features` (adding `building-ui` for browser clients), review with `reviewing-code`, and accept nothing as done until `verifying-features` passes. Infrastructure work additionally selects `docs/infrastructure.md` and only the applicable operation-family profiles. Tools without skill support get the same content through the `docs/` links in `AGENTS.md`.
 
 ### Claude users
 
