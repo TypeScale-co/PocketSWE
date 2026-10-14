@@ -20,7 +20,7 @@ Epic Orchestrator
 
     After all steps submit:
     │
-    ├── Reviewer Sub-agents (integrated feature)
+    ├── Reviewer Sub-agents (integrated feature; the host's, where it conducts the Integration Review)
     │       Correctness
     │       Architecture
     │       Test
@@ -33,7 +33,7 @@ The **Epic Orchestrator** owns the epic from discovery through close. It spawns 
 
 Each **Step Agent** is a fresh-context sub-agent responsible for one implementation step. It implements, runs the project's tests, orchestrates a Step Review, resolves blocking findings, and submits the completed step back to the Epic Orchestrator.
 
-**Reviewer Sub-agents** are fresh-context sub-agents spawned by either a Step Agent or the Epic Orchestrator to perform independent code review investigations.
+**Reviewer Sub-agents** are fresh-context sub-agents spawned by either a Step Agent or the Epic Orchestrator to perform independent code review investigations. Where a host conducts the Integration Review, the Epic Orchestrator spawns Integration Reviewers only at the host's request.
 
 ### Review Schedule
 
@@ -47,6 +47,8 @@ Each review runs through the `reviewing-code` skill, which defines how a review 
 Added Reviewers never replace Correctness or Test.
 
 **Integration Review** — Correctness, Architecture, Test, and Security, on the combined diff. Reviewers examine the seams between steps and every North Star acceptance criterion. Passing Step Reviews are not evidence that the integrated feature is correct.
+
+Where the build runs under a host that conducts the Integration Review itself (ContextEngine runs it as integration boards), the host decides when it runs, which Reviewers sit on it, how many rounds it takes, and when it is settled, and hands the findings to the Epic Orchestrator to resolve. The Epic Orchestrator then starts Integration Reviewers only when the host asks, exactly the ones the host names, and never runs an Integration Review of its own, including on a resume or during Close. Step Reviews are unchanged.
 
 ---
 
@@ -173,7 +175,8 @@ After integration, the Epic Orchestrator:
 
 1. Assigns the work each step reported as undone to a named step, or records it as a
    known limitation
-2. Orchestrates the Integration Review (via `reviewing-code` skill)
+2. Orchestrates the Integration Review (via `reviewing-code` skill), or, where the host
+   conducts it, starts only the Reviewers the host asks for and resolves what they raise
 3. Resolves all blocking findings, each with a test that fails without the fix
 4. Verifies no conflicts between steps
 5. Verifies no architectural violations introduced by integration
